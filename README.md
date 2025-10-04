@@ -13,6 +13,26 @@ This solution addresses the *Expense Management Problem Statement* where employe
 
 ---
 
+
+Team Leader Name:  Vaishnavi patil
+Email:  vaishnavi.work3@gmail.com
+Phone:  9898649530
+Passing Year:  2026
+
+
+##Reviewer##
+Aman Patel (ampa)
+
+Team Member 1
+Name:  krishna vaghela
+Phone: 9638769840
+Passing Year 2026
+
+Team Member 2
+Name:  Ruchi Manuji Rajput
+Email:  rajputruchi7149@gmail.com
+Phone:  9512030107
+
 ## ⚡ Features
 - *Employee Dashboard* – Submit expenses with details (amount, description, category).
 - *Manager Dashboard* – Review and approve/reject expenses.
@@ -43,7 +63,4 @@ This solution addresses the *Expense Management Problem Statement* where employe
 - 🐙 *GitHub* for version control
 - 🚀 *Vite* for fast builds
 
----
 
-## 📂 Project Structure
-braber che?
