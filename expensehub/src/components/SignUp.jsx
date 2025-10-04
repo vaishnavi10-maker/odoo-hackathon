@@ -1,7 +1,25 @@
+// src/SignUp.jsx
 import React, { useState } from "react";
+import { useNavigate, Link } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
+import { toast } from "sonner";
 
 function SignUp() {
+  const auth = useAuth();   // ✅ safer destructure
+  const navigate = useNavigate();
+
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [role, setRole] = useState("employee");
+  const [error, setError] = useState("");
+
+  if (!auth) {
+    return <p className="text-center text-red-500">⚠ AuthContext not found</p>;
+  }
+
+  const { login } = auth;
 
   // Password strength checker
   const getPasswordStrength = (pass) => {
@@ -17,6 +35,53 @@ function SignUp() {
 
   const strength = getPasswordStrength(password);
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setError("");
+
+    if (!name || !email || !password || !confirmPassword) {
+      setError("Please fill in all fields");
+      return;
+    }
+
+    if (strength !== "strong") {
+      setError("Password must be strong to continue");
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      setError("Passwords do not match");
+      return;
+    }
+
+    // 🔹 Mock signup (replace with real API later)
+    const newUser = {
+      id: Date.now(),
+      name,
+      email,
+      role,
+      token: "fake-jwt-token",
+    };
+
+    // Save in localStorage + AuthContext
+    localStorage.setItem("user", JSON.stringify(newUser));
+    login(newUser);
+
+    toast.success("Signup successful!");
+
+    // ✅ Navigate based on role
+    switch (role) {
+      case "admin":
+        navigate("/admin");
+        break;
+      case "manager":
+        navigate("/manager");
+        break;
+      default:
+        navigate("/employee");
+    }
+  };
+
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-50">
       <div className="w-full max-w-md p-6 bg-white rounded-2xl shadow-lg">
@@ -24,14 +89,18 @@ function SignUp() {
           Create Account
         </h2>
 
-        <form className="flex flex-col gap-4">
+        <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
           <input
             type="text"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
             placeholder="Enter Name"
             className="w-full px-4 py-2 border rounded-lg outline-none focus:ring-1 focus:ring-amber-400"
           />
           <input
             type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
             placeholder="Enter Email"
             className="w-full px-4 py-2 border rounded-lg outline-none focus:ring-1 focus:ring-amber-400"
           />
@@ -42,6 +111,15 @@ function SignUp() {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             placeholder="Enter Password"
+            className="w-full px-4 py-2 border rounded-lg outline-none focus:ring-1 focus:ring-amber-400"
+          />
+
+          {/* Confirm Password input */}
+          <input
+            type="password"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            placeholder="Confirm Password"
             className="w-full px-4 py-2 border rounded-lg outline-none focus:ring-1 focus:ring-amber-400"
           />
 
@@ -57,26 +135,22 @@ function SignUp() {
               }`}
             >
               {strength === "strong"
-                ? "Strong password"
+                ? "✅ Strong password"
                 : strength === "medium"
-                ? " Medium password"
-                : " Weak password"}
+                ? "⚠️ Medium password"
+                : "❌ Weak password"}
             </p>
           )}
 
-          {/* Currency Dropdown */}
+          {/* Role selection */}
           <select
-            id="currency"
+            value={role}
+            onChange={(e) => setRole(e.target.value)}
             className="w-full px-4 py-2 border rounded-lg outline-none focus:ring-1 focus:ring-amber-400"
           >
-            <option value="">Select Currency</option>
-            <option value="INR">Indian Rupee</option>
-            <option value="USD">US Dollar</option>
-            <option value="EUR">Euro</option>
-            <option value="GBP">British Pound</option>
-            <option value="JPY">Japanese Yen</option>
-            <option value="AUD">Australian Dollar</option>
-            <option value="CAD">Canadian Dollar</option>
+            <option value="employee">Employee</option>
+            <option value="manager">Manager</option>
+            <option value="admin">Admin</option>
           </select>
 
           {/* Submit button */}
@@ -91,7 +165,21 @@ function SignUp() {
           >
             Sign Up
           </button>
+
+          {/* Error message */}
+          {error && <p className="text-sm text-red-500">{error}</p>}
         </form>
+
+        {/* Already have account link */}
+        <p className="mt-4 text-center text-sm text-gray-600">
+          Already have an account?{" "}
+          <Link
+            to="/login"
+            className="text-amber-600 font-medium hover:underline"
+          >
+            Log in
+          </Link>
+        </p>
       </div>
     </div>
   );

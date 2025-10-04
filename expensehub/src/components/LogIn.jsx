@@ -1,17 +1,21 @@
+// src/LogIn.jsx
 import React, { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
 export default function LogIn() {
+  const { login } = useAuth();
+  const navigate = useNavigate();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
-  // Email validation 
-  const validateEmail = (email) => {
-    return /\S+@\S+\.\S+/.test(email);
-  };
+  // Email validation
+  const validateEmail = (email) => /\S+@\S+\.\S+/.test(email);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -28,14 +32,30 @@ export default function LogIn() {
 
     setIsLoading(true);
 
+    // 🔹 Mock login logic (replace with API call later)
     setTimeout(() => {
-      if (email === "demo@example.com" && password === "password123") {
-        alert("Login successful!");
+      let role = null;
+      if (email === "admin@example.com" && password === "admin123") {
+        role = "admin";
+      } else if (email === "manager@example.com" && password === "manager123") {
+        role = "manager";
+      } else if (email === "employee@example.com" && password === "employee123") {
+        role = "employee";
+      }
+
+      if (role) {
+        login({ id: 1, name: email.split("@")[0], role, token: "fake-jwt-token" });
+
+        // Redirect based on role
+        if (role === "admin") navigate("/admin");
+        if (role === "manager") navigate("/manager");
+        if (role === "employee") navigate("/employee");
       } else {
         setError("Invalid email or password");
       }
+
       setIsLoading(false);
-    }, 1500);
+    }, 1200);
   };
 
   return (
@@ -59,6 +79,7 @@ export default function LogIn() {
             <input
               type={showPassword ? "text" : "password"}
               value={password}
+              onChange={(e) => setPassword(e.target.value)}
               placeholder="Enter Password"
               className="w-full px-4 py-2 border rounded-lg outline-none focus:ring-1 focus:ring-amber-400 pr-10"
             />
@@ -66,6 +87,7 @@ export default function LogIn() {
               onClick={() => setShowPassword(!showPassword)}
               className="absolute right-3 top-3 cursor-pointer text-gray-500"
             >
+              {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
             </span>
           </div>
 
@@ -100,7 +122,7 @@ export default function LogIn() {
 
           <div className="text-center text-sm">
             Don't have an account?{" "}
-            <a href="#" className="text-amber-500 hover:underline">
+            <a href="/signup" className="text-amber-500 hover:underline">
               Sign Up
             </a>
           </div>
