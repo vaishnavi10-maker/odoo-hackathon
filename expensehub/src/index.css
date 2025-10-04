@@ -1,4 +1,39 @@
-:root {
+@import "tailwindcss";
+/* *{
+  border: 1px solid red;
+} */
+button,.button {
+  border-radius: 8px;
+  border: 1px solid #714b67;
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  font-weight: 600;
+  font-family: inherit;
+  background-color: #714b67;
+  cursor: pointer;
+  transition: border-color 0.25s;
+  box-shadow: 0 0 0 0.15rem rgba(134, 102, 126  ,.5);
+  color: #ffffff;
+}
+button:hover {
+  border-color: #5a3c52;
+  background-color: #604058;
+}
+button:focus{
+  /* outline: 4px auto -webkit-focus-ring-color;
+   */
+box-shadow: 0 0 0 0.25rem rgba(134, 102, 126  , .5);
+}
+button:active{
+  background-color:#5a3c52 ;
+  border-color: #55384d;
+}
+input,select{
+    padding: 0.6em 1.2em;
+    border: 1px solid #55384d;
+    border-radius: 8px;
+}
+/* :root {
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
@@ -37,17 +72,18 @@ h1 {
 
 button {
   border-radius: 8px;
-  border: 1px solid transparent;
+  border: 1px solid #714b67;
   padding: 0.6em 1.2em;
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
-  background-color: #1a1a1a;
+  background-color: #714b67;
   cursor: pointer;
   transition: border-color 0.25s;
 }
 button:hover {
-  border-color: #646cff;
+  border-color: #5a3c52;
+  background-color: #604058;
 }
 button:focus,
 button:focus-visible {
@@ -65,4 +101,4 @@ button:focus-visible {
   button {
     background-color: #f9f9f9;
   }
-}
+} */
